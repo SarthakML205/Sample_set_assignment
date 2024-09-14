@@ -1,0 +1,159 @@
+### Project Documentation for the "Chat with Your PDF" Application
+
+
+## Table of Contents
+1. [Project Overview](#project-overview)
+2. [Directory Structure](#directory-structure)
+3. [Installation Guide](#installation-guide)
+4. [Application Workflow](#application-workflow)
+5. [Key Components](#key-components)
+6. [Environment Variables](#environment-variables)
+7. [Dockerization](#dockerization)
+8. [How to Use](#how-to-use)
+9. [Contributing](#contributing)
+10. [License](#license)
+
+---
+
+## 1. Project Overview
+
+**"Chat with Your PDF"** is a Streamlit-based web application that allows users to upload PDFs, extract text, create embeddings for document retrieval, and interact with the content using a conversational chatbot. The application leverages `LangChain`, `Groq`, and HuggingFace's `InstructorEmbedding` to provide an efficient and seamless experience for PDF querying.
+
+---
+
+## 2. Directory Structure
+Groq_app.py # main file to run the rag application 
+rag.ipynp  #colab notebook that has the implementation of above app
+htmlTemplates.py # file contains ui of streamlit application
+requirements.txt # list of all the packages required to run the application
+Docker #docker file
+approach_overview.txt # this file contian information related to approcach, decision, and challenges faced.
+
+---
+
+## 3. Installation Guide
+
+### Prerequisites:
+- Python 3.9 or higher
+- Docker (if running the app in a container)
+
+### Steps to set up the project locally:
+
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/SarthakML205/Sample_set_assignment.git
+    cd project-directory
+    ```
+
+2. Create a virtual environment (optional but recommended):
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate
+    ```
+
+3. Install dependencies:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4. Run the Streamlit app:
+    ```bash
+    streamlit run Groq_app.py
+    ```
+
+---
+
+## 4. Application Workflow
+
+The application consists of several key steps:
+
+1. **PDF Upload**: Users upload one or multiple PDF documents using the Streamlit sidebar.
+2. **Text Extraction**: Text is extracted from the uploaded PDFs using `PyPDF2`.
+3. **Chunking**: The extracted text is divided into chunks for processing using `LangChain`.
+4. **Vector Store Creation**: Embeddings for the text chunks are created using HuggingFace's `InstructorEmbedding` and stored in a `FAISS` vector store.
+5. **Conversational Chain**: A conversational chain is built using `LangChain`'s `ConversationalRetrievalChain` and Groq's LLM.
+6. **User Interaction**: The user can ask questions about the PDF content, and the chatbot provides relevant answers based on the vectorized embeddings.
+
+---
+
+## 5. Key Components
+
+### a. `Groq_app.py`
+- **Purpose**: This is the main application file, built using Streamlit.
+- **Functions**:
+  - `get_pdf_text`: Extracts text from uploaded PDF files.
+  - `get_text_chunks`: Splits the extracted text into smaller, manageable chunks.
+  - `get_vectorstore`: Creates embeddings for the text chunks and stores them in a FAISS vector store.
+  - `get_conversation_chain`: Builds a conversational chain using the embeddings and Groq's LLM.
+  - `handle_userinput`: Handles user questions and fetches responses from the conversation chain.
+
+### b. `Dockerfile`
+- **Purpose**: To containerize the application, making deployment easier.
+- **Key Commands**:
+  - Sets up the Python environment in Docker.
+  - Installs dependencies from the `requirements.txt`.
+  - Configures the app to run on port `8501` for Streamlit.
+
+---
+
+## 6. Environment Variables
+
+The application requires a few environment variables for API keys and settings. Create a `.env` file in the project root with the following content:
+
+```
+GROQ_API_KEY=your_groq_api_key_here
+```
+
+---
+
+## 7. Dockerization
+
+You can run the application in a Docker container for easy deployment and environment consistency.
+
+### Steps to Build and Run the Docker Container:
+
+1. **Build the Docker image**:
+    ```bash
+    docker build -t streamlit-groq-app .
+    ```
+
+2. **Run the Docker container**:
+    ```bash
+    docker run -p 8501:8501 streamlit-groq-app
+    ```
+
+This will start the application on `http://localhost:8501`.
+
+---
+
+## 8. How to Use
+
+### Interacting with the App:
+1. **Upload PDFs**: Use the sidebar to upload your PDF files.
+2. **Process the PDFs**: After uploading, click the "Process" button to extract the content and create vector embeddings.
+3. **Ask Questions**: Once the PDF has been processed, you can type in questions related to the document content, and the chatbot will answer.
+
+---
+
+## 9. Contributing
+
+If you'd like to contribute to this project, please follow these steps:
+1. Fork the repository.
+2. Create a new feature branch (`git checkout -b feature-branch`).
+3. Commit your changes (`git commit -m 'Add some feature'`).
+4. Push to the branch (`git push origin feature-branch`).
+5. Open a pull request.
+
+---
+
+## 10. License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+---
+
+### Notes:
+
+- **Streamlit** is used as the web interface.
+- **LangChain** handles the document chunking, embedding, and retrieval.
+- **Groq** is used as the LLM for answering questions based on the PDF content.

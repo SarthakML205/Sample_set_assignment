@@ -1,0 +1,49 @@
+### Approach and Overview
+
+In building the **"Chat with Your PDF"** application, the aim was to create a tool that allows users to upload PDFs, extract content, and interact with the document using conversational AI. Below is a summary of the approach, challenges, and solutions.
+
+---
+
+### Key Technologies Used
+
+- **Streamlit**: For a simple, user-friendly interface.
+- **PyPDF2**: For extracting text from PDFs.
+- **LangChain**: To manage text chunking, embeddings, and conversational chains.
+- **FAISS**: For efficient similarity search within document embeddings.
+- **HuggingFace InstructorEmbedding**: To generate high-quality document embeddings.
+- **Groq API (Llama 3)**: For question answering based on document context.
+
+---
+
+### Implementation Details
+
+#### 1. **PDF Text Extraction**
+- **PyPDF2** was used to extract text. Some PDFs had formatting issues, but for standard text-based PDFs, it worked well.
+  
+#### 2. **Text Chunking**
+- **LangChain's CharacterTextSplitter** was used to break text into chunks (1000 characters with 200 overlap). This allows us to fit the text within LLM token limits while retaining context.
+
+#### 3. **Embedding Creation**
+- **HuggingFace InstructorEmbedding** generated embeddings, and **FAISS** was used to store and retrieve these embeddings efficiently.
+  
+#### 4. **Conversational Chain**
+- The app utilizes **LangChain's conversational retrieval chain** and **Groq's Llama 3 API** to provide contextual, multi-turn question answering.
+
+#### 5. **Dockerization**
+- The app was containerized using **Docker** for easy deployment and consistent environment setup.
+
+---
+
+### Challenges and Solutions
+
+1. **Performance with Large PDFs**: Chunking the text helped manage large documents. Embeddings were computed in smaller pieces to reduce computational load.
+  
+2. **Maintaining Conversation Context**: **ConversationBufferMemory** was used to retain context over multiple user interactions, allowing for natural, multi-turn conversations.
+
+3. **Deployment and Scalability**: Docker ensured easy deployment, while tools like FAISS and HuggingFace embeddings provided scalability for large documents.
+
+---
+
+### Conclusion
+
+The project successfully integrates document interaction via LLM, offering efficient text extraction, embedding-based search, and conversational capabilities. It balances user experience with performance, handling large documents effectively.
